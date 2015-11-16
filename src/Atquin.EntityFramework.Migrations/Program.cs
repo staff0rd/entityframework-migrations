@@ -10,7 +10,7 @@ using System.IO;
 using System.Resources;
 using System.Data.Entity.Migrations;
 
-namespace Atquin.EntityFramework
+namespace Atquin.EntityFramework.Migrations
 {
     public class Program
     {

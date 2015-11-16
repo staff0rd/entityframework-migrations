@@ -5,7 +5,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Reflection;
 
-namespace Atquin.EntityFramework
+namespace Atquin.EntityFramework.Migrations
 {
     public class DbContextOperations
     {

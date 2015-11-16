@@ -3,10 +3,9 @@
   "description": "Entity Framework 6 Migrations for ASP.NET 5",
   "authors": [ "Stafford Williams" ],
   "tags": [ "" ],
-  "projectUrl": "",
+  "projectUrl": "https://github.com/staff0rd/entityframework-migrations",
   "licenseUrl": "",
-
-	"dependencies": {
+  	"dependencies": {
 		"Microsoft.Framework.Logging.Console": "1.0.0-beta7",
 		"Microsoft.Framework.Configuration.Json": "1.0.0-beta7",
 		"EntityFramework": "6.1.3",
