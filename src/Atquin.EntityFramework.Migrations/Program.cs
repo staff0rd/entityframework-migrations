@@ -25,7 +25,8 @@ namespace Atquin.EntityFramework.Migrations
             _logger = logProvider?.CreateLogger(this.GetType().ToString()) ?? new ConsoleLogger(this.GetType().ToString(), (catgory,level) => { return true; });
 
             Configuration =
-                new ConfigurationBuilder(appEnv.ApplicationBasePath)
+                new ConfigurationBuilder()
+                .SetBasePath(appEnv.ApplicationBasePath)
                 .AddJsonFile("config.json", true)
                 .Build();
         }
