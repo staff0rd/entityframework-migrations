@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Dnx.Runtime;
+using System;
 using Microsoft.Framework.Logging;
 using System.Reflection;
 using Microsoft.Framework.Runtime.Common.CommandLine;
@@ -8,14 +9,13 @@ using System.Data.Entity.Migrations.Design;
 using System.IO;
 using System.Resources;
 using System.Data.Entity.Migrations;
-using Microsoft.Framework.Runtime;
 
-namespace Fanatics.Data.Migrations
+namespace Atquin.EntityFramework
 {
     public class Program
     {
         private const string _defaultConnectionStringName = "Data:DefaultConnection:ConnectionString";
-        private const string _defaultProviderName = "Npgsql";
+        private const string _defaultProviderName = "System.Data.SqlClient";
         private readonly IApplicationEnvironment _appEnv;
         private readonly ILogger _logger;
 
@@ -26,7 +26,7 @@ namespace Fanatics.Data.Migrations
 
             Configuration =
                 new ConfigurationBuilder(appEnv.ApplicationBasePath)
-                .AddJsonFile("config.json")
+                .AddJsonFile("config.json", true)
                 .Build();
         }
 
@@ -117,10 +117,9 @@ namespace Fanatics.Data.Migrations
                 connectionString = Configuration[connectionStringName];
             }
 
-            return new DbMigrationsConfiguration
-            {
-                TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(connectionString, providerName)
-            };
+            var config = new DbContextOperations(_appEnv.ApplicationName).GetMigrationConfiguration();
+            config.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(connectionString, providerName);
+            return config;
         }
 
         private void AddMigration(string name, DbMigrationsConfiguration config, bool ignoreChanges)
@@ -134,8 +133,11 @@ namespace Fanatics.Data.Migrations
 
             File.WriteAllText(Path.Combine(migration.Directory, migration.MigrationId + ".Designer.cs"), migration.DesignerCode);
 
-            var resxFile = Path.Combine(migration.Directory,
-                   name + ".resx");
+            var resourceDirectory = Path.Combine(migration.Directory, "Resources");
+            if (!Directory.Exists(resourceDirectory))
+                Directory.CreateDirectory(resourceDirectory);
+
+            var resxFile = Path.Combine(resourceDirectory, name + ".resx");
             using (ResXResourceWriter resx = new ResXResourceWriter(resxFile))
             {
                 foreach (var kvp in migration.Resources)

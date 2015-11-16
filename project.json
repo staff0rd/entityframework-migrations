@@ -1,7 +1,7 @@
 ﻿{
-  "version": "1.0.0-*",
-  "description": "Atquin.EntityFramework Console Application",
-  "authors": [ "stafford" ],
+  "version": "1.0.0-beta7",
+  "description": "Entity Framework 6 Migrations for ASP.NET 5",
+  "authors": [ "Stafford Williams" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
@@ -15,12 +15,11 @@
 			"type": "build"
 		},
 		"Microsoft.Framework.Configuration": "1.0.0-beta7",
-		"Microsoft.Framework.Runtime.Abstractions": "1.0.0-beta7-12255",
-		"Microsoft.Framework.DependencyInjection": "1.0.0-beta7"
+		"Microsoft.Dnx.Runtime.Abstractions": "1.0.0-beta7"
 	},
 
   "commands": {
-    "Atquin.EntityFramework": "Atquin.EntityFramework"
+    "ef": "Atquin.EntityFramework"
   },
 
   "frameworks": {
