@@ -14,21 +14,20 @@ namespace Atquin.EntityFramework.Migrations
 {
     public class Program
     {
-        private const string _defaultConnectionStringName = "Data:DefaultConnection:ConnectionString";
-        private const string _defaultProviderName = "System.Data.SqlClient";
-        private readonly IApplicationEnvironment _appEnv;
         private readonly ILogger _logger;
+        private readonly Migrator _migrator;
 
         public Program(IApplicationEnvironment appEnv, ILoggerProvider logProvider)
         {
-            _appEnv = appEnv;
             _logger = logProvider?.CreateLogger(this.GetType().ToString()) ?? new ConsoleLogger(this.GetType().ToString(), (catgory,level) => { return true; });
-
+            
             Configuration =
                 new ConfigurationBuilder()
                 .SetBasePath(appEnv.ApplicationBasePath)
                 .AddJsonFile("config.json", true)
                 .Build();
+
+            _migrator = new Migrator(Configuration, appEnv.ApplicationName);
         }
 
         public IConfiguration Configuration { get; set; }
@@ -72,7 +71,7 @@ namespace Atquin.EntityFramework.Migrations
 
                         return 1;
                     }
-                    AddMigration(name.Value, GetConfiguration(connectionString, providerName), ignoreChanges.HasValue());
+                    _migrator.AddMigration(name.Value, GetConfiguration(connectionString, providerName), ignoreChanges.HasValue());
                     return 0;
                 }
                 );
@@ -86,7 +85,7 @@ namespace Atquin.EntityFramework.Migrations
                 update.OnExecute(() =>
                 {
                     var config = GetConfiguration(connectionString, providerName);
-                    return UpdateDatabase(config);
+                    return _migrator.UpdateDatabase(config);
                 });
             });
 
@@ -101,57 +100,9 @@ namespace Atquin.EntityFramework.Migrations
         private DbMigrationsConfiguration GetConfiguration(CommandOption connectionStringOption, CommandOption providerNameOption)
         {
             Console.WriteLine($"Connection String Specified: {connectionStringOption.Value()}");
-            var connectionString = connectionStringOption.HasValue() ? connectionStringOption.Value() : Configuration[_defaultConnectionStringName];
-            var providerName = providerNameOption.HasValue() ? providerNameOption.Value() : _defaultProviderName;
-            return GetConfiguration(connectionString, providerName: providerName);
-        }
-
-        private DbMigrationsConfiguration GetConfiguration(string connectionString = null, string connectionStringName = null, string providerName = null)
-        {
-            if (string.IsNullOrEmpty(providerName))
-                providerName = _defaultProviderName;
-
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                if (string.IsNullOrEmpty(connectionStringName))
-                    connectionStringName = _defaultConnectionStringName;
-                connectionString = Configuration[connectionStringName];
-            }
-
-            var config = new DbContextOperations(_appEnv.ApplicationName).GetMigrationConfiguration();
-            config.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(connectionString, providerName);
-            return config;
-        }
-
-        private void AddMigration(string name, DbMigrationsConfiguration config, bool ignoreChanges)
-        {
-            Console.WriteLine($"Creating migration {name}...");
-
-            var scaffolder = new MigrationScaffolder(config);
-            var migration = scaffolder.Scaffold(name, ignoreChanges);
-
-            File.WriteAllText(Path.Combine(migration.Directory, migration.MigrationId + ".cs"), migration.UserCode);
-
-            File.WriteAllText(Path.Combine(migration.Directory, migration.MigrationId + ".Designer.cs"), migration.DesignerCode);
-
-            var resourceDirectory = Path.Combine(migration.Directory, "Resources");
-            if (!Directory.Exists(resourceDirectory))
-                Directory.CreateDirectory(resourceDirectory);
-
-            var resxFile = Path.Combine(resourceDirectory, name + ".resx");
-            using (ResXResourceWriter resx = new ResXResourceWriter(resxFile))
-            {
-                foreach (var kvp in migration.Resources)
-                    resx.AddResource(kvp.Key, kvp.Value);
-            }
-        }
-
-        private static int UpdateDatabase(DbMigrationsConfiguration config)
-        {
-            Console.WriteLine("Updating...");
-            var migrator = new DbMigrator(config);
-            migrator.Update();
-            return 0;
+            var connectionString = connectionStringOption.HasValue() ? connectionStringOption.Value() : null;
+            var providerName = providerNameOption.HasValue() ? providerNameOption.Value() : null;
+            return _migrator.GetConfiguration(connectionString, providerName: providerName);
         }
     }
 }

@@ -8,7 +8,7 @@
   	"dependencies": {
 		"Microsoft.Framework.Logging.Console": "1.0.0-beta8",
 		"Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
-		"EntityFramework": "6.1.3",
+		"EntityFramework": "6.1.4-beta8",
 		"Microsoft.Framework.CommandLineUtils": {
 			"version": "1.0.0-beta5-11722",
 			"type": "build"

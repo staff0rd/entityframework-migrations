@@ -9,15 +9,15 @@ namespace Atquin.EntityFramework.Migrations
 {
     public class DbContextOperations
     {
-        private string _assemblyName;
-        public DbContextOperations(string startupAssembly)
+        private string _dataContextAssembly;
+        public DbContextOperations(string dataContextAssembly)
         {
-            _assemblyName = startupAssembly;
+            _dataContextAssembly = dataContextAssembly;
         }
 
         public IDictionary<Type, Func<DbMigrationsConfiguration>> FindConfigurations()
         {
-            var startupAssembly = Assembly.Load(new AssemblyName(_assemblyName));
+            var startupAssembly = Assembly.Load(new AssemblyName(_dataContextAssembly));
             var configurations = new Dictionary<Type, Func<DbMigrationsConfiguration>>();
 
             var types = GetConstructibleTypes(startupAssembly)
@@ -35,7 +35,7 @@ namespace Atquin.EntityFramework.Migrations
 
         public IDictionary<Type, Func<DbContext>> FindContextTypes()
         {
-            var startupAssembly = Assembly.Load(new AssemblyName(_assemblyName));
+            var startupAssembly = Assembly.Load(new AssemblyName(_dataContextAssembly));
             var contexts = new Dictionary<Type, Func<DbContext>>();
 
             var types = GetConstructibleTypes(startupAssembly)
