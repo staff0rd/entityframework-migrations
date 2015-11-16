@@ -1,0 +1,33 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Atquin.EntityFramework Console Application",
+  "authors": [ "stafford" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+	"dependencies": {
+		"Microsoft.Framework.Logging.Console": "1.0.0-beta7",
+		"Microsoft.Framework.Configuration.Json": "1.0.0-beta7",
+		"EntityFramework": "6.1.3",
+		"Microsoft.Framework.CommandLineUtils": {
+			"version": "1.0.0-beta5-11722",
+			"type": "build"
+		},
+		"Microsoft.Framework.Configuration": "1.0.0-beta7",
+		"Microsoft.Framework.Runtime.Abstractions": "1.0.0-beta7-12255",
+		"Microsoft.Framework.DependencyInjection": "1.0.0-beta7"
+	},
+
+  "commands": {
+    "Atquin.EntityFramework": "Atquin.EntityFramework"
+  },
+
+  "frameworks": {
+	"dnx451": {
+		"frameworkAssemblies": {
+			"System.Windows.Forms": "4.0.0.0"
+		}
+	}
+  }
+}
