@@ -49,11 +49,7 @@ namespace Atquin.EntityFramework.Migrations
 
             File.WriteAllText(Path.Combine(migration.Directory, migration.MigrationId + ".Designer.cs"), migration.DesignerCode);
 
-            var resourceDirectory = Path.Combine(migration.Directory, "Resources");
-            if (!Directory.Exists(resourceDirectory))
-                Directory.CreateDirectory(resourceDirectory);
-
-            var resxFile = Path.Combine(resourceDirectory, name + ".resx");
+            var resxFile = Path.Combine(migration.Directory, name + ".resx");
             using (ResXResourceWriter resx = new ResXResourceWriter(resxFile))
             {
                 foreach (var kvp in migration.Resources)
