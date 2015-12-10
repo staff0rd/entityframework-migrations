@@ -1,14 +1,11 @@
-﻿using Microsoft.Dnx.Runtime;
-using System;
-using Microsoft.Framework.Logging;
+﻿using System;
 using System.Reflection;
 using Microsoft.Framework.Runtime.Common.CommandLine;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.Logging.Console;
-using System.Data.Entity.Migrations.Design;
-using System.IO;
-using System.Resources;
 using System.Data.Entity.Migrations;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace Atquin.EntityFramework.Migrations
 {
@@ -19,7 +16,7 @@ namespace Atquin.EntityFramework.Migrations
 
         public Program(IApplicationEnvironment appEnv, ILoggerProvider logProvider)
         {
-            _logger = logProvider?.CreateLogger(this.GetType().ToString()) ?? new ConsoleLogger(this.GetType().ToString(), (catgory,level) => { return true; });
+            _logger = logProvider?.CreateLogger(this.GetType().ToString()) ?? new ConsoleLogger(this.GetType().ToString(), (catgory,level) => { return true; }, true);
             
             Configuration =
                 new ConfigurationBuilder()

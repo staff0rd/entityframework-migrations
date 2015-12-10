@@ -1,4 +1,4 @@
-﻿using Microsoft.Framework.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Data.Entity;
 
 namespace Atquin.EntityFramework.Migrations

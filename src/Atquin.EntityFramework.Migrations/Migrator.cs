@@ -1,5 +1,5 @@
 ﻿using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.Migrations.Design;
