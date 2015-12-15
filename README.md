@@ -17,9 +17,11 @@ dnx ef add MigrationName
 ~~~
 3. VS2015 will then immediately generate a same-named *.cs for the *.resx file created.  Delete that *.cs file.
 4. Now you can update the database;
-~~~
+
+ ~~~
 dnx ef update
 ~~~
+
 ## Options
 ~~~
 dnx ef add --help
