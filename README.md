@@ -10,7 +10,7 @@
 	},
 ~~~
 
-2. Open command prompt and execute; 
+2. Open command prompt and execute the following.  By default it will look for `config.json/Data:Default:ConnectionString`.
  ~~~
 cd /your/datacontext/directory
 dnx ef add MigrationName
