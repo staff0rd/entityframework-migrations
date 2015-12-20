@@ -1,5 +1,4 @@
-﻿using Microsoft.Dnx.Runtime;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.Migrations.Design;
@@ -10,7 +9,6 @@ namespace Atquin.EntityFramework.Migrations
 {
     public class Migrator
     {
-        private const string _defaultConnectionStringName = "Data:DefaultConnection:ConnectionString";
         private const string _defaultProviderName = "System.Data.SqlClient";
         private readonly IConfiguration _config;
         private readonly string _dataContextAssemblyName;
@@ -26,15 +24,12 @@ namespace Atquin.EntityFramework.Migrations
             if (string.IsNullOrEmpty(providerName))
                 providerName = _defaultProviderName;
 
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                if (string.IsNullOrEmpty(connectionStringName))
-                    connectionStringName = _defaultConnectionStringName;
-                connectionString = _config[connectionStringName];
-            }
-
             var config = new DbContextOperations(_dataContextAssemblyName).GetMigrationConfiguration();
-            config.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(connectionString, providerName);
+            if (!string.IsNullOrEmpty(connectionStringName))
+                connectionString = _config[connectionStringName];
+            if (!string.IsNullOrEmpty(connectionString))
+                config.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(connectionString, providerName);
+
             return config;
         }
 

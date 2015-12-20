@@ -96,7 +96,6 @@ namespace Atquin.EntityFramework.Migrations
 
         private DbMigrationsConfiguration GetConfiguration(CommandOption connectionStringOption, CommandOption providerNameOption)
         {
-            Console.WriteLine($"Connection String Specified: {connectionStringOption.Value()}");
             var connectionString = connectionStringOption.HasValue() ? connectionStringOption.Value() : null;
             var providerName = providerNameOption.HasValue() ? providerNameOption.Value() : null;
             return _migrator.GetConfiguration(connectionString, providerName: providerName);
