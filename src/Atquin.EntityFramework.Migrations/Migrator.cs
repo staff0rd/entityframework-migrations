@@ -40,6 +40,9 @@ namespace Atquin.EntityFramework.Migrations
             var scaffolder = new MigrationScaffolder(config);
             var migration = scaffolder.Scaffold(name, ignoreChanges);
 
+            if (!Directory.Exists(migration.Directory))
+                Directory.CreateDirectory(migration.Directory);
+
             File.WriteAllText(Path.Combine(migration.Directory, migration.MigrationId + ".cs"), migration.UserCode);
 
             File.WriteAllText(Path.Combine(migration.Directory, migration.MigrationId + ".Designer.cs"), migration.DesignerCode);
