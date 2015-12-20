@@ -8,9 +8,53 @@
 		"EntityFramework6.Npgsql": "3.0.3", <!-- if you want npgsql -->
 		"Atquin.EntityFramework.Migrations": "1.0.0-rc1-final"
 	},
+        "commands": {
+		"ef": "Atquin.EntityFramework.Migrations"
+	}
+~~~
+2. If you don't have already, add a DataContextFactory that will create a DataContext using your config.json's connection string;
+
+ ~~~
+    public class MyContextFactory : IDbContextFactory<MyDataContext>
+    {
+        private IConfiguration _config;
+
+        public MyContextFactory()
+        {
+            _config = new ConfigurationBuilder().AddJsonFile("config.json").Build();
+        }
+
+        public MyDataContext Create()
+        {
+            return new MyDataContext(_config["Data:DefaultConnection:ConnectionString"]);
+        }
+    }
 ~~~
 
-2. Open command prompt and execute the following.  By default it will look for `config.json/Data:Default:ConnectionString`.
+4. Add a configuration to Migrate/Seed data;
+
+ ~~~
+ 
+namespace MyProject.Data.Migrations
+{
+        internal sealed class Configuration : DbMigrationsConfiguration<MyDataContext>
+        {
+            public Configuration()
+            {
+                AutomaticMigrationsEnabled = false;
+                MigrationsDirectory = "Migrations"; // should match the end of your Namespace above
+            }
+
+            protected override void Seed(MyDataContext context)
+            {
+                Console.WriteLine("Executing seed...");
+                ...
+            }
+        }
+}
+~~~
+
+2. Open command prompt and execute the following;
  ~~~
 cd /your/datacontext/directory
 dnx ef add MigrationName
@@ -20,6 +64,13 @@ dnx ef add MigrationName
 
  ~~~
 dnx ef update
+~~~
+
+### Specifying a custom conection string
+See the options below.  Example;
+~~~
+dnx ef update -c "Data Source=myServerAddress;
+location=myDataBase;User ID=myUsername;password=myPassword;" -p Npgsql
 ~~~
 
 ## Options
